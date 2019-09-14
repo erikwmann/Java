@@ -2,16 +2,16 @@
  * A grid is an 2D array
  */
 
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.Collections;
 public class Grid
 {
     private int grid [][];
-    Random random;
+    ArrayList numList;
     
     public Grid(int size){
         grid = new int [size][size];
         
-        random = new Random();
         fillGrid(size);
     }
     
@@ -28,19 +28,43 @@ public class Grid
     
     //Fills the grid with random numbers
     private void fillGrid(int size){
-        int num = random.nextInt(size)+1;//1 to size
-        
+        ArrayList<Integer> nums = new ArrayList<Integer>();
+        int temp;
+        int timeout =0;
         for(int i = 0; i<grid.length;i++){ 
-            for(int j = 0; j<grid.length;j++){   
-                num = random.nextInt(size)+1;//1 to size
-                grid[i][j] = num;
-                
+            for(int k = 1; k<=grid.length;k++){
+                nums.add(k);
+            }
+            Collections.shuffle(nums);
+            for(int j = 0; j<grid.length;j++){            
+                temp = nums.get(0);
+                grid[i][j] = temp; //get first element
+                nums.remove(0);
                 //If the check come back false reset the squre and decrement j
                 if(!(checkRow(i) && checkCol(j) && checkSquare(i, j))){
-                    grid[i][j] = 0;
+                    grid[i][j] = 0; //reset the square
+                    nums.add(temp); //append the failed number to the end of the array
                     j--;
                 }
+                
+                //if the row cannot be filled due to invalid number positions
+                if(timeout > grid.length + 1){
+                    rowReset(i); //reset the row
+                    i--; //do the row over
+                    j+=grid.length; //stop filling the row
+                }
+                //printGrid();
+                timeout++;
             }
+            nums.clear();//removes all elements from the arraylist
+            timeout = 0; //reset the timeout
+        }
+    }
+    
+    //Reset a row on the grid
+    private void rowReset(int row){
+        for(int i =0; i<grid.length;i++){
+            grid[row][i] = 0;
         }
     }
     
