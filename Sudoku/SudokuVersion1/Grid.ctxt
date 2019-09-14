@@ -12,6 +12,6 @@ comment5.params=row
 comment5.target=boolean\ checkRow(int)
 comment6.params=col
 comment6.target=boolean\ checkCol(int)
-comment7.params=row\ column
+comment7.params=row\ col
 comment7.target=boolean\ checkSquare(int,\ int)
 numComments=8
